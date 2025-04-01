@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 <div align="center">
-  <img src="https://github.com/yourusername/afya-sentinel/raw/main/images/logo.png" width="300" alt="Afya Sentinel Logo">
+  <img src="https://github.com/sazalo101/afya-sentinel/raw/main/images/demoimage.png" width="300" alt="Afya Sentinel Logo">
 </div>
 
 ## 🚀 Key Features
@@ -20,8 +20,7 @@
 ## 📊 Live Demo
 [![Demo Video](https://img.shields.io/badge/Watch_Demo-FF0000?logo=youtube&logoColor=white)](https://youtu.be/demo-link)
 
-Access our test dashboard:  
-🔗 [https://afya-sentinel.azurewebsites.net](https://afya-sentinel.azurewebsites.net)  
+Access our test dashboard:  🔗
 *(Test credentials: guest/Pass1234)*
 
 ## 🔧 Tech Stack
@@ -46,7 +45,7 @@ Access our test dashboard:
 ### Installation
 ```bash
 # Clone repo
-git clone https://github.com/yourusername/afya-sentinel.git
+git clone https://github.com/sazalo101/afya-sentinel.git
 cd afya-sentinel
 
 # Install dependencies
