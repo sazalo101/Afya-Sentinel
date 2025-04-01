@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 <div align="center">
-  <img src="https://github.com/sazalo101/afya-sentinel/raw/main/images/demoimage.png" width="300" alt="Afya Sentinel Logo">
+  <img src="https://github.com/sazalo101/afya-sentinel/demoimage.png" width="300" alt="Afya Sentinel Logo">
 </div>
 
 ## 🚀 Key Features
