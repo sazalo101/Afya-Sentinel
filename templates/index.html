@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- County Selector Card -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden col-span-1">
+        <div class="p-6 bg-blue-600 text-white">
+            <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-map-marker-alt mr-2"></i> Select County
+            </h2>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                {% for county in counties %}
+                <a href="/predict/{{ county }}" 
+                   class="block p-4 border rounded-lg hover:bg-blue-50 transition-colors flex justify-between items-center">
+                    <span class="font-medium">{{ county }}</span>
+                    <span class="text-sm text-gray-500">
+                        {{ latest_data[latest_data["county"] == county]["beds_available"].values[0] }} beds
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- National Overview -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden col-span-2">
+        <div class="p-6 bg-green-600 text-white">
+            <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-flag mr-2"></i> National Health Status
+            </h2>
+        </div>
+        <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {% for county in latest_data.itertuples() %}
+            <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start">
+                    <h3 class="font-bold text-lg">{{ county.county }}</h3>
+                    <span class="px-2 py-1 rounded-full text-xs 
+                              {% if county.malaria_cases > 100 %}bg-red-100 text-red-800
+                              {% else %}bg-green-100 text-green-800{% endif %}">
+                        {{ county.malaria_cases }} malaria
+                    </span>
+                </div>
+                <div class="mt-3 space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Beds Available</span>
+                        <span class="font-medium">{{ county.beds_available }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Cholera Cases</span>
+                        <span class="font-medium">{{ county.cholera_cases }}</span>
+                    </div>
+                </div>
+                <a href="/predict/{{ county.county }}" class="mt-4 inline-block w-full text-center bg-blue-50 text-blue-600 py-1 rounded-md text-sm">
+                    Analyze <i class="fas fa-chevron-right ml-1"></i>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

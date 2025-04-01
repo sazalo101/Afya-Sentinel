@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-8 flex justify-between items-center">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-800">{{ county }} County Health Analysis</h1>
+        <p class="text-gray-600">Last updated: {{ latest.date }}</p>
+    </div>
+    <div class="flex items-center space-x-2">
+        <span class="px-4 py-2 rounded-full 
+                  {% if risk_score >= 70 %}bg-red-600 text-white
+                  {% elif risk_score >= 40 %}bg-yellow-500 text-white
+                  {% else %}bg-green-600 text-white{% endif %} font-bold">
+            Risk: {{ "%.0f"|format(risk_score) }}%
+        </span>
+        <a href="/" class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">
+            <i class="fas fa-arrow-left mr-1"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Key Metrics -->
+    <div class="space-y-6">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="p-4 bg-blue-600 text-white">
+                <h2 class="font-bold flex items-center">
+                    <i class="fas fa-hospital mr-2"></i> Facility Status
+                </h2>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <p class="text-gray-500">Available Beds</p>
+                    <p class="text-3xl font-bold">{{ latest.beds_available }}</p>
+                    <div class="h-2 bg-gray-200 rounded-full mt-1">
+                        <div class="h-2 bg-blue-500 rounded-full" 
+                             style="width: {{ (latest.beds_available / 150) * 100 }}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-gray-500">ICU Capacity</p>
+                    <p class="text-3xl font-bold">{{ latest.icu_capacity }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Staff Shortage</p>
+                    <p class="text-3xl font-bold">{{ latest.staff_shortage }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="p-4 bg-red-600 text-white">
+                <h2 class="font-bold flex items-center">
+                    <i class="fas fa-virus mr-2"></i> Disease Cases
+                </h2>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <p class="text-gray-500">Malaria Cases</p>
+                    <p class="text-3xl font-bold">{{ latest.malaria_cases }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Cholera Cases</p>
+                    <p class="text-3xl font-bold">{{ latest.cholera_cases }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-6">
+            <h2 class="font-bold text-lg mb-4 flex items-center">
+                <i class="fas fa-chart-line mr-2 text-blue-500"></i> Bed Availability Trend (30 Days)
+            </h2>
+            <canvas id="bedsChart" height="200"></canvas>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-6">
+            <h2 class="font-bold text-lg mb-4 flex items-center">
+                <i class="fas fa-chart-area mr-2 text-red-500"></i> Disease Cases Trend (30 Days)
+            </h2>
+            <canvas id="casesChart" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Recommendations -->
+<div class="mt-8 bg-white rounded-xl shadow-md overflow-hidden">
+    <div class="p-4 bg-purple-600 text-white">
+        <h2 class="font-bold flex items-center">
+            <i class="fas fa-lightbulb mr-2"></i> Azure AI Recommendations
+        </h2>
+    </div>
+    <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for rec in recommendations %}
+        <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+            <div class="text-3xl mb-2">{{ rec.icon }}</div>
+            <h3 class="font-bold text-lg">{{ rec.title }}</h3>
+            <p class="text-gray-600 mt-1">{{ rec.description }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Beds Chart
+new Chart(document.getElementById('bedsChart'), {
+    type: 'line',
+    data: {
+        labels: {{ trend_dates|safe }},
+        datasets: [{
+            label: 'Available Beds',
+            data: {{ trend_beds|safe }},
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            tension: 0.3,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+// Cases Chart
+new Chart(document.getElementById('casesChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ trend_dates|safe }},
+        datasets: [{
+            label: 'Malaria Cases',
+            data: {{ trend_cases|safe }},
+            backgroundColor: '#EF4444'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
+{% endblock %}

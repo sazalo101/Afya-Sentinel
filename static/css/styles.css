@@ -1,0 +1,44 @@
+/* Custom enhancements to Tailwind */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Pulse animation for high-risk indicators */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.high-risk-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Chart tooltip styling */
+.chart-tooltip {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 4px !important;
+    padding: 8px 12px !important;
+    color: white !important;
+    font-family: 'Inter' !important;
+}
